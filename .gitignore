@@ -247,5 +247,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+result/*
+*.log
 
 # End of https://www.gitignore.io/api/java,linux,macos,eclipse,windows,java-web,netbeans,intellij
