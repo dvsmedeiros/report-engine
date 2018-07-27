@@ -1,0 +1,50 @@
+[ {
+  "id" : 1,
+  "description" : "Relatório de exemplo - ReportEngine",
+  "name" : "example",
+  "title" : "Example",
+  "version" : "1.0.0",
+  "params" : [ {
+    "type" : "STRING",
+    "name" : "title",
+    "label" : "Title",
+    "required" : true,
+    "value" : "Jasper PDF Example XXX"
+  }, {
+    "type" : "STRING",
+    "name" : "name",
+    "label" : "Name",
+    "required" : true,
+    "value" : "Nome"
+  }, {
+    "type" : "STRING",
+    "name" : "value",
+    "label" : "Value",
+    "required" : true,
+    "value" : "Valor"
+  }, {
+    "type" : "INTEGER",
+    "name" : "integer_test",
+    "label" : "Integer",
+    "required" : true,
+    "value" : 1
+  }, {
+    "type" : "LONG",
+    "name" : "long_test",
+    "label" : "Long",
+    "required" : true,
+    "value" : 1
+  }, {
+    "type" : "DOUBLE",
+    "name" : "double_test",
+    "label" : "Double",
+    "required" : true,
+    "value" : 1.0
+  }, {
+    "type" : "DATE",
+    "name" : "calendar_teste",
+    "label" : "Calendar",
+    "required" : true,
+    "value" : 1532672516239
+  } ]
+} ]
