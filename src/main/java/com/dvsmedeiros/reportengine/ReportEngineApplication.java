@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,8 +78,8 @@ public class ReportEngineApplication implements CommandLineRunner {
         boolean hasArgs = args != null;
         boolean hasReporIdArg = hasArgs && args.length > 0;
         boolean hasInputDataSourceArg = hasArgs && args.length > 1;
-        boolean hasReportId = hasReporIdArg && StringUtils.isNumeric( args[ 0 ] );
-        boolean hasDataSourceName = hasInputDataSourceArg && StringUtils.isNotEmpty( args[ 1 ] );
+        boolean hasReportId = hasReporIdArg && args[0].chars().allMatch( Character::isDigit );
+        boolean hasDataSourceName = hasInputDataSourceArg && !args[ 1 ].isEmpty();
         
         if ( !hasReporIdArg || !hasReportId ) {
             logger.error( "report id arg is required: ");

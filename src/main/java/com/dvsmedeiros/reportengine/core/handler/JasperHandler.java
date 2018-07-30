@@ -3,13 +3,11 @@ package com.dvsmedeiros.reportengine.core.handler;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -86,7 +84,7 @@ public class JasperHandler implements IReportHandler {
         
         try {
             Files.list( Paths.get( templatePath ) )
-                .filter( file -> FileExtention.JRXML.getExtention().endsWith( FilenameUtils.getExtension( file.getFileName().toString() ) ) )
+                .filter( file -> FileExtention.JRXML.getExtention().endsWith( getFileExtension( file ) ) )
                 .forEach( file -> {
                     logger.info( "compiling report design: " + file.getFileName() );
                     try {
@@ -105,6 +103,15 @@ public class JasperHandler implements IReportHandler {
         } catch ( IOException e ) {
             e.printStackTrace();
         }
+    }
+    
+    private String getFileExtension ( Path file ) {
+        String fileName = file.getFileName().toString();
+        if ( fileName.lastIndexOf( "." ) != - 1 && fileName.lastIndexOf( "." ) != 0 ) {
+            return fileName.substring( fileName.lastIndexOf( "." ) + 1 );
+
+        }
+        return "";
     }
 
 }
