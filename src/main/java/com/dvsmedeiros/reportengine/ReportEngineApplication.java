@@ -83,15 +83,17 @@ public class ReportEngineApplication implements CommandLineRunner {
         boolean hasReportId = hasReporIdArg && StringUtils.isNumeric( args[ 0 ] );
         boolean hasDataSourceName = hasInputDataSourceArg && StringUtils.isNotEmpty( args[ 1 ] );
         
-        if ( hasReporIdArg && hasReportId ) {
-            reportId = Long.parseLong( args[ 0 ] );
+        if ( !hasReporIdArg || !hasReportId ) {
+            logger.error( "report id arg is required: ");
+            return;
         }
-        logger.error( "report id: " + reportId );
+        reportId = Long.parseLong( args[ 0 ] );
+        logger.info( "report id: " + reportId );
         
         if ( hasInputDataSourceArg && hasDataSourceName ) {
             dataSourceName = args[ 1 ];
         }
-        logger.error( "data source name: " + dataSourceName );
+        logger.info( "data source name: " + dataSourceName );
         
         init();
         
@@ -114,7 +116,8 @@ public class ReportEngineApplication implements CommandLineRunner {
         ReportRequest request = new ReportRequest();
         request.setReport( report );
         
-        readInputDataSource( dataSourceName ).ifPresent( ds -> request.setDataSource( ds ) );
+        readInputDataSource( dataSourceName ).ifPresent( ds -> request.setDataSource( ds ) );        
+        
         request.setFormat( Format.PDF );
         request.setOwner( "Administrador" );
         
@@ -157,7 +160,7 @@ public class ReportEngineApplication implements CommandLineRunner {
     private Optional < JsonNode > readInputDataSource(String fileName) throws JsonParseException, JsonMappingException, IOException {
         logger.info( "searching input data source with name: " + fileName );
         JsonNode readValue = new ObjectMapper().readValue(new File(input.concat( fileName )), JsonNode.class);
-        return Optional.ofNullable( readValue );
+        return Optional.of( readValue );
     }
     
     private void init () {
