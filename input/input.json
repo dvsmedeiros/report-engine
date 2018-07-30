@@ -1,0 +1,10 @@
+[{
+	"name": "A",
+	"value": "foo"
+}, {
+	"name": "B",
+	"value": "bar"
+}, {
+	"name": "C",
+	"value": "bla"
+}]
