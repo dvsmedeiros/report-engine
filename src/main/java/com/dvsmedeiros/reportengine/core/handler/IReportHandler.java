@@ -7,4 +7,5 @@ import com.dvsmedeiros.reportengine.domain.ReportResponse;
 
 public interface IReportHandler {
     public ReportResponse execute ( ReportRequest request , Map < String , Object > params );
+    public void compile();
 }
