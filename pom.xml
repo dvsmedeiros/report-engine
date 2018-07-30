@@ -71,7 +71,7 @@
 				<directory>${project.basedir}</directory>	<!-- from -->
 				<targetPath>${project.build.directory}</targetPath>	<!-- to -->
 				<includes><!-- what -->
-					<include>config.properties</include>					
+					<include>*.properties</include>					
 				</includes>
 			</resource>
 			<resource>
@@ -79,7 +79,7 @@
 				<directory>${project.basedir}/input</directory>
 				<targetPath>${project.build.directory}/input</targetPath>
 				<includes>
-					<include>input.json</include>					
+					<include>*.json</include>					
 				</includes>
 			</resource>
 			<resource>
@@ -96,7 +96,7 @@
 				<directory>${project.basedir}/config</directory>
 				<targetPath>${project.build.directory}/config</targetPath>
 				<includes>
-					<include>reports.json</include>
+					<include>*.json</include>
 				</includes>
 			</resource>
 		</resources>
