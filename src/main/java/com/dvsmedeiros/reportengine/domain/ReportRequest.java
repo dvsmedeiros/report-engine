@@ -2,13 +2,17 @@ package com.dvsmedeiros.reportengine.domain;
 
 import java.io.ByteArrayInputStream;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JsonDataSource;
 
 public class ReportRequest {
 
     private Report report;
-    private String dataSource;
+    private JsonNode dataSource;
     private Format format;
     private String owner;
 
@@ -19,12 +23,12 @@ public class ReportRequest {
     public void setReport ( Report report ) {
         this.report = report;
     }
-
-    public String getDataSource () {
+    
+    public JsonNode getDataSource () {
         return dataSource;
     }
 
-    public void setDataSource ( String dataSource ) {
+    public void setDataSource ( JsonNode dataSource ) {
         this.dataSource = dataSource;
     }
 
@@ -46,9 +50,12 @@ public class ReportRequest {
 
     public JsonDataSource getJsonDataSource () {
         try {
-            ByteArrayInputStream jsonDataStream = new ByteArrayInputStream( this.dataSource.getBytes() );
+            String jsonString = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString( this.dataSource );
+            ByteArrayInputStream jsonDataStream = new ByteArrayInputStream( jsonString.getBytes() );
             return new JsonDataSource( jsonDataStream );
         } catch ( JRException e ) {
+            e.printStackTrace();
+        } catch ( JsonProcessingException e ) {
             e.printStackTrace();
         }
         return null;

@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,7 @@ import com.dvsmedeiros.reportengine.domain.StringParamValue;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
@@ -44,13 +48,19 @@ public class ReportEngineApplication implements CommandLineRunner {
     
     @Value ( "${engine.report.path.template}" )
     private String template;
+    @Value ( "${engine.report.path.input}" )
+    private String input;
     @Value ( "${engine.report.path.result}" )
     private String result;
     @Value ( "${engine.report.path.config}" )
     private String config;
     @Value ( "${engine.report.config.report}" )
     private String configReports;
-
+    @Value ( "${engine.report.create.example}" )
+    private Boolean createExample;
+    @Value ( "${engine.report.compile.all}" )
+    private Boolean compile;
+    
     @Autowired
     @Qualifier("jasperHandler")
     private IReportHandler handler;
@@ -63,26 +73,48 @@ public class ReportEngineApplication implements CommandLineRunner {
 
     @Override
     public void run ( String... args ) throws Exception {
-
-        init();
-        createReportsJsonWithExample();
         
-        Long id = 1L;
-        Optional < Report > found = findReportById( id );
+        Long reportId = 0L;
+        String dataSourceName = "input.json";
+        
+        boolean hasArgs = args != null;
+        boolean hasReporIdArg = hasArgs && args.length > 0;
+        boolean hasInputDataSourceArg = hasArgs && args.length > 1;
+        boolean hasReportId = hasReporIdArg && StringUtils.isNumeric( args[ 0 ] );
+        boolean hasDataSourceName = hasInputDataSourceArg && StringUtils.isNotEmpty( args[ 1 ] );
+        
+        if ( hasReporIdArg && hasReportId ) {
+            reportId = Long.parseLong( args[ 0 ] );
+        }
+        logger.error( "report id: " + reportId );
+        
+        if ( hasInputDataSourceArg && hasDataSourceName ) {
+            dataSourceName = args[ 1 ];
+        }
+        logger.error( "data source name: " + dataSourceName );
+        
+        init();
+        
+        if(createExample != null && createExample.equals( Boolean.TRUE )) {
+            createReportsJsonWithExample();
+        }
+        
+        Optional < Report > found = findReportById( reportId );
         if(!found.isPresent()) {
             //configuração do relatorio não foi encontrada.
             //inserir configuração em em ./config/reports.json
-            logger.error( "report id: " + id + " - configuration not found." );
+            logger.error( "report id: " + reportId + " - configuration not found." );
             logger.error( "create or edit file: " + config.concat( configReports ) + " and included config of this report" );
             return;
         }
+        
         Report report = found.get();
-        logger.info( "found configuration of report id: " +  id + " with name: " +  report.getDescription());
+        logger.info( "found configuration of report id: " +  reportId + " with name: " +  report.getDescription());
         
         ReportRequest request = new ReportRequest();
         request.setReport( report );
-        String rawJsonData = "[{\"name\":\"Jerry\", \"value\":\"Jesus\"}," + "{\"name\":\"Gideon\", \"value\": \"Loves\"}," + "{\"name\":\"Eva\", \"value\": \"You\"}" + "]";
-        request.setDataSource( rawJsonData );
+        
+        readInputDataSource( dataSourceName ).ifPresent( ds -> request.setDataSource( ds ) );
         request.setFormat( Format.PDF );
         request.setOwner( "Administrador" );
         
@@ -109,7 +141,6 @@ public class ReportEngineApplication implements CommandLineRunner {
             
         });
         
-        
         ReportResponse reponse = handler.execute( request , params );
         
         logger.info( "Report Name: ".concat( reponse.getName() ) );
@@ -123,9 +154,15 @@ public class ReportEngineApplication implements CommandLineRunner {
         return Arrays.asList( configured ).stream().filter( report -> report.getId().equals( id ) ).findFirst();
     }
     
+    private Optional < JsonNode > readInputDataSource(String fileName) throws JsonParseException, JsonMappingException, IOException {
+        logger.info( "searching input data source with name: " + fileName );
+        JsonNode readValue = new ObjectMapper().readValue(new File(input.concat( fileName )), JsonNode.class);
+        return Optional.ofNullable( readValue );
+    }
+    
     private void init () {
-
-        Arrays.asList( template , result , config ).stream()
+        
+        Arrays.asList( template , result , config, input ).stream()
             .filter( dir -> ! new File( dir ).exists() )
             .forEach( dir -> {
                 File file = new File( dir );
@@ -133,6 +170,10 @@ public class ReportEngineApplication implements CommandLineRunner {
                     logger.info( "create diretório: " + file.getAbsolutePath() );
                     file.mkdirs();
             } );
+        
+        if(compile != null && compile.equals( Boolean.TRUE )) {
+            handler.compile();
+        }
     }
     
     private void createReportsJsonWithExample () throws JsonGenerationException , JsonMappingException , IOException {
