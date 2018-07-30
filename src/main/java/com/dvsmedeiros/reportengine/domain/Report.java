@@ -1,5 +1,6 @@
 package com.dvsmedeiros.reportengine.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings ( "serial" )
@@ -35,7 +36,7 @@ public class Report extends DomainEntity {
     }
 
     public List < Param > getParams () {
-        return params;
+        return params != null ? params : new ArrayList<>();
     }
 
     public void setParams ( List < Param > params ) {
