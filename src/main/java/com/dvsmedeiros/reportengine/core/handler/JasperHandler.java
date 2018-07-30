@@ -9,13 +9,16 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.dvsmedeiros.reportengine.domain.DefaultConfig;
 import com.dvsmedeiros.reportengine.domain.FileExtention;
 import com.dvsmedeiros.reportengine.domain.Format;
+import com.dvsmedeiros.reportengine.domain.Report;
 import com.dvsmedeiros.reportengine.domain.ReportRequest;
 import com.dvsmedeiros.reportengine.domain.ReportResponse;
 
@@ -43,6 +46,18 @@ public class JasperHandler implements IReportHandler {
         ReportResponse response = new ReportResponse();
         
         try {
+            
+            boolean hasRequest = request != null;
+            boolean hasReport = hasRequest && request.getReport() != null;
+            
+            Report reportRequest = request.getReport();
+            
+            params.put( "TITLE" , hasReport && reportRequest.getTitle() != null ? reportRequest.getTitle() : "" );
+            params.put( "DESCRIPTION" , hasReport && reportRequest.getDescription() != null ? reportRequest.getDescription() : "" );
+            params.put( "VERSION" , hasReport && reportRequest.getVersion() != null ? reportRequest.getVersion() : "" );
+            params.put( "SUB_REPORT_DIR" , templatePath != null && !templatePath.isEmpty() ? templatePath : DefaultConfig.TEMPLATE.getValue());
+            
+            resultPath = resultPath != null && !resultPath.isEmpty() ? resultPath : DefaultConfig.RESULT.getValue();
             
             String jasperFileName = templatePath.concat( request.getReport().getName() ).concat( FileExtention.JASPER.getExtention() );
             JasperReport report = ( JasperReport ) JRLoader.loadObject( new File( jasperFileName ) );

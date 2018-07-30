@@ -1,50 +1,38 @@
 [ {
   "id" : 1,
-  "description" : "Relatório de exemplo - ReportEngine",
-  "name" : "example",
-  "title" : "Example",
+  "description" : "Sample Description - ReportEngine",
+  "name" : "sample",
+  "title" : "Sample - ReportEngine",
   "version" : "1.0.0",
   "params" : [ {
     "type" : "STRING",
-    "name" : "title",
-    "label" : "Title",
+    "name" : "param_foo",
+    "label" : "Foo: ",
     "required" : true,
-    "value" : "Jasper PDF Example XXX"
-  }, {
-    "type" : "STRING",
-    "name" : "name",
-    "label" : "Name",
-    "required" : true,
-    "value" : "Nome"
-  }, {
-    "type" : "STRING",
-    "name" : "value",
-    "label" : "Value",
-    "required" : true,
-    "value" : "Valor"
+    "value" : "Bar"
   }, {
     "type" : "INTEGER",
-    "name" : "integer_test",
-    "label" : "Integer",
+    "name" : "param_integer",
+    "label" : "Number: ",
     "required" : true,
     "value" : 1
   }, {
     "type" : "LONG",
-    "name" : "long_test",
-    "label" : "Long",
+    "name" : "param_long",
+    "label" : "Long Number: ",
     "required" : true,
     "value" : 1
   }, {
     "type" : "DOUBLE",
-    "name" : "double_test",
-    "label" : "Double",
+    "name" : "param_double",
+    "label" : "Double Number: ",
     "required" : true,
     "value" : 1.0
   }, {
     "type" : "DATE",
-    "name" : "calendar_teste",
-    "label" : "Calendar",
+    "name" : "param_calendar",
+    "label" : "Now: ",
     "required" : true,
-    "value" : 1532923451130
+    "value" : 1545769615403
   } ]
 } ]

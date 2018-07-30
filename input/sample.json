@@ -1,0 +1,61 @@
+[{
+		"id": "5968dd23fc13ae04d9000001",
+		"product_name": "sildenafil citrate",
+		"supplier": "Wisozk Inc",
+		"quantity": 261,
+		"unit_cost": 10.47,
+		"detail": [{
+				"id": 1,
+				"description": "Wisozk Inc 1"
+			},
+			{
+				"id": 2,
+				"description": "Wisozk Inc 2"
+			},
+			{
+				"id": 3,
+				"description": "Wisozk Inc 3"
+			}
+		]
+	},
+	{
+		"id": "5968dd23fc13ae04d9000002",
+		"product_name": "Mountain Juniperus ashei",
+		"supplier": "Keebler-Hilpert",
+		"quantity": 292,
+		"unit_cost": 8.74,
+		"detail": [{
+				"id": 1,
+				"description": "Keebler-Hilpert 1"
+			},
+			{
+				"id": 2,
+				"description": "Keebler-Hilpert 2"
+			},
+			{
+				"id": 3,
+				"description": "Keebler-Hilpert 3"
+			}
+		]
+	},
+	{
+		"id": "5968dd23fc13ae04d9000003",
+		"product_name": "Dextromathorphan HBr",
+		"supplier": "Schmitt-Weissnat",
+		"quantity": 211,
+		"unit_cost": 20.53,
+		"detail": [{
+				"id": 1,
+				"description": "Schmitt-Weissnat 1"
+			},
+			{
+				"id": 2,
+				"description": "Schmitt-Weissnat 2"
+			},
+			{
+				"id": 3,
+				"description": "Schmitt-Weissnat 3"
+			}
+		]
+	}
+]

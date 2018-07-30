@@ -24,6 +24,7 @@ import org.springframework.context.annotation.PropertySource;
 
 import com.dvsmedeiros.reportengine.core.handler.IReportHandler;
 import com.dvsmedeiros.reportengine.domain.CalendarParamValue;
+import com.dvsmedeiros.reportengine.domain.DefaultConfig;
 import com.dvsmedeiros.reportengine.domain.DoubleParamValue;
 import com.dvsmedeiros.reportengine.domain.Format;
 import com.dvsmedeiros.reportengine.domain.IntegerParamValue;
@@ -39,6 +40,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.Criteria;
 
 @SpringBootApplication
 @PropertySource ( "file:./config.properties" )
@@ -165,6 +167,11 @@ public class ReportEngineApplication implements CommandLineRunner {
     
     private void init () {
         
+        template = template != null && !template.isEmpty() ? template : DefaultConfig.TEMPLATE.getValue();
+        result = result != null && !result.isEmpty() ? result : DefaultConfig.RESULT.getValue();
+        config = config != null && !config.isEmpty() ? config : DefaultConfig.CONFIG.getValue();
+        input = input != null && !input.isEmpty() ? input : DefaultConfig.INPUT.getValue();
+        
         Arrays.asList( template , result , config, input ).stream()
             .filter( dir -> ! new File( dir ).exists() )
             .forEach( dir -> {
@@ -182,22 +189,24 @@ public class ReportEngineApplication implements CommandLineRunner {
     private void createReportsJsonWithExample () throws JsonGenerationException , JsonMappingException , IOException {
 
         Report example = new Report();
-        example.setName( "example" );
+        example.setName( "sample" );
         example.setId( 1L );
-        example.setDescription( "Relatório de exemplo - ReportEngine" );
-        example.setTitle( "Example" );
+        example.setDescription( "Sample Description - ReportEngine" );
+        example.setTitle( "Sample - ReportEngine" );
         example.setVersion( "1.0.0" );
 
-        Param title = new StringParamValue( ParamType.STRING , "title" , "Title" , true , "Jasper PDF Example XXX" );
-        Param name = new StringParamValue( ParamType.STRING , "name" , "Name" , true , "Nome" );
-        Param value = new StringParamValue( ParamType.STRING , "value" , "Value" , true , "Valor" );
+        Param paramFoo = new StringParamValue( ParamType.STRING , "param_foo" , "Foo: " , true , "Bar" );
 
-        Param integer = new IntegerParamValue( ParamType.INTEGER , "integer_test" , "Integer" , true , 1 );
-        Param longValue = new LongParamValue( ParamType.LONG , "long_test" , "Long" , true , 1L );
-        Param doubleValue = new DoubleParamValue( ParamType.DOUBLE , "double_test" , "Double" , true , 1D );
-        Param calendar = new CalendarParamValue( ParamType.DATE , "calendar_teste" , "Calendar" , true , Calendar.getInstance() );
+        Param paramInteger = new IntegerParamValue( ParamType.INTEGER , "param_integer" , "Number: " , true , 1 );
+        Param paramLong = new LongParamValue( ParamType.LONG , "param_long" , "Long Number: " , true , 1L );
+        Param paramDouble = new DoubleParamValue( ParamType.DOUBLE , "param_double" , "Double Number: " , true , 1D );
+        Calendar christmas = Calendar.getInstance();
+        christmas.set( Calendar.DAY_OF_MONTH , 25 );
+        christmas.set( Calendar.MONTH , Calendar.DECEMBER );
+        christmas.set( Calendar.YEAR , 2018 );
+        Param paramCalendar = new CalendarParamValue( ParamType.DATE , "param_calendar" , "Now: " , true , christmas );
 
-        example.setParams( Arrays.asList( title , name , value , integer , longValue , doubleValue , calendar ) );
+        example.setParams( Arrays.asList(paramFoo , paramInteger , paramLong , paramDouble , paramCalendar ) );
 
         new ObjectMapper().writerWithDefaultPrettyPrinter().writeValue( new File( config.concat( configReports ) ) , Arrays.asList( example ) );
     }
