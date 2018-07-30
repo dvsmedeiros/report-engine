@@ -41,12 +41,13 @@ engine.report.compile.all=true
 #### Report Configuration ./config/config.properties/reports.json
 
 ```
+
 [
   {
     "id" : 1,
     "description" : "Description Report",
-    "name" : "example",
-    "title" : "Example",
+    "name" : <jasper_file_name_without_extension>,
+    "title" : "Sample",
     "version" : "1.0.0",
     "params" :
     [
@@ -55,7 +56,7 @@ engine.report.compile.all=true
         "name" : "title",
         "label" : "Title: ",
         "required" : true,
-        "value" : "Title Report"
+        "value" : "Title Sample Report"
       },
       ...
     ]
