@@ -123,7 +123,7 @@ public class ReportEngineApplication implements CommandLineRunner {
         request.getReport().getParams().forEach( param -> {
             
             //TODO refactory to use Strategy
-            if(param instanceof StringParamValue) {
+            if ( param instanceof StringParamValue ) {
                 StringParamValue parsed = (StringParamValue) param;
                 params.put( parsed.getName() , parsed.getValue() );
             } else if(param instanceof IntegerParamValue) {
@@ -190,9 +190,11 @@ public class ReportEngineApplication implements CommandLineRunner {
         example.setDescription( "Sample Description - ReportEngine" );
         example.setTitle( "Sample - ReportEngine" );
         example.setVersion( "1.0.0" );
-
+        
+        String base64image = "iVBORw0KGgoAAAANSUhEUgAAANQAAADtCAMAAADwdatPAAAA6lBMVEX///8KUaEATZ8ASZ7Kysrm5ua8vLwATJ8AR50ARZz7+/vQz817k7Pa2toJUqFIeLVokMHx8fFbeqS1s7Gbs9NMcaSJps1LfLff3t+0tLQAQJoAPprg6PIRVqNTe7VdgrnK0+Tx9vuxvthMcrCSpsqxxt82ba+nvtmBn8nS4O51lcMlXaYGNm28x90JS5YIRIgIPXwtZasAMZTp7fNtibuRmaioqKgAOJdmgaWSrdHO2Omgt9S4w9EAPoYeUpHM0diJnLaxtr0aQXKTmp88aJ8aR4GersW/xMmkqa4AMHgAKWgAOYtTdqS+0OWRLyE1AAAKi0lEQVR4nO2dC3vaOBZAbTlEllNMaCilfkCchIfxpK3rNBTobKezM9vOtvz/v7OS8QsQaUytazbV+b42CUFGx7KvdGXZURSJRCKRSJ4STl0IM/JuRm49mG44jYQ4RSFBal0g3b00jOql7rTalFSTaoW9RrtqpwmpzylG/0/lVl2rXiVTxdNms1qrTt3tpJrah7OzZqPC88rX63ZSTfz89KTKpnJMdqpmmwe2Wf8fS531GlU5RUExliMVOLInOxE/vzit7vjzRnjzQyBxs49lUieVSU3IxgGndUEHSANsCpDqbgU+fVzJZh/LORbQUnNLRRstRYCltOqlFhaNfBuRgawq2OzjESAV7UY6svj5zZZgW+rnO6qIE74tv4KqPp5UykQVSXkup0uyxGQ2+8hb6vvXr58/fer97PHXwpzhgy0uDeWRtZT6+3//+efbt2/2zJ7N6D/bts4P2L9TnTcksquv+EMkUrQib357+/bN69eFKmmmX7bdJlbuhPJBxUxI3feSt1Qi9do04x/Z/9p1yWi4JOlYkp6kwTLLe11Btd9Ddk6lUqpZaCvrYymrKB1IxHvEX5Djk6JftT8aJaw8rRD4yFAZp1IoFGjAYUfKzFvKpFIlumOPdlBmWpLMFWWcpomoJVJhF56UmWVZ2rNm79E9V1DINsiUvjDPuot+2WoZ3s90LbuBIh62pUP3ZzRvfOTmJyQPfNqAFeqmUto0fsddOKKErQ775TL+gRIMlcuAvX49Sccdzl0QBAOnWKi/pIX8IC0Ujh4hZWZS7GjJdrj27NF5400hmONrL9bckmppCDPINe0A5wStf7LGyq3Fvkca7sTvG9LvdIz1VV4IIUK3ubBRAn4w9Oy0FNVzD5DqZNNhpoqC9U6epsejvq4sHWyEYejqqj6gUroahAzaUreEfU9rrrOB70JH2mg60lTiZIVMWuhOWbyzLLbvLMvWHyOlou/3n798ajpRFHktVFbqsjDFh8xkTJ7Nz6ZSyHI8z1sipDpUSr/yYgwqRZaG51xj7Y6eTvTL1FCMlzg+FZNCHay6juE4kWOpbkS/PkoqHaUb8YZKSkXFoZF+m7zaTzdDw3siFa0/k1xSKZK+j0mxLNIxUegpKwsF7EWPINvPCw1Qkr/YavCj6uxKGeWlomLgs5bJq0Yfb0vZcf06usWVom3kRspUI+uGnWL9Ji/UZXsCUMobFa4DWJP85aylVonUeqdPNezzpJQ+DiIjxNoieRW3is2LfEipaT7NYtLTOZMK081Yi1zKMFYqDg0qha7vGJ1MijZ46NEu3FzHGZ/2EVmhIcIjA1DqxsrPKNTK3+0FWev5iRRu9fu0WdlZN9fNOKSTcyUJFNG5hgdKZKtu3CGwkaSdF0I4mecAkeoUOihV6678yFsPB7zsVdtLpFSMNYxUdorRkF6QYiGdxnp6nBalTDsthFQ3nbuBkLolG1mhTiwbBaP+dDJfZq+vT3W6WURHCipGA49JaXOfsnDibdD+lHZTtJOOrO2WUmkh+ts7A0zKCHmz5LQNND2/6pEkvusuxx9hFiDnWjFQ0OxEdUesBT2T9WIMek65rBChhRahao3BpByb47TNLJWKm2xF8GBbSp+n/SmN60mwvIrfl0S/MdHOwaQ6j7oKlUrF9XMwvla4IT2mq+NkqIj0ZbYnHA31j0nKRG4qFdePRu7RdksVpByiYnb8+TYiXl7IZHviaKToADfJE1o4bimPdUe0pfDdTczlppQy1VGw8FZYJd3tQkcjlSe+yU6nIw2TDWhVrGsU+0a51YtSBu2ULIsgfVQsFCLXOSapJJ1SWta79djUml0p8xlZw6Rms+JlEWNgE53Yg41CfWu2PlzfERNOChGis5519/ibJRntajiMt+UPhwvFGab47PvNKVxnvLyKNgstWCHGcPjDSyiVSaHWarycDkYusS2qV/Czuz+qRNVUJoVfpi8ZzmK4vJn2R6ZN/Wy8fKi8EARIFfD8FexFnDXVHX48qZoQ21IUXzC8i0SCpfwAI5HQoXN/t36CpfriF/yR3UAkVsoYIbGLXZjUHLqlrmzWZ4mDjkjc3bNKdKDwl4IZc6Y1hUe/OpBSHKQUFFKKg5SCQkpx+KWk8ikIIIrLJAVJ+QQauzAfJUgK/N4VM51qFyjluPFEJRx6dvlcnJTiiU7jtykO1mX04yCloJBSHPZJLa6AKV41ECR1aQmdb+FMwNgd4VJz8JssdfGdb+TawGiFwZ+oc8rwgCnWUkY/DlIKCinFYe8oHfQeWGdzpbCofCoUe7FtBxyID+lPsvNdAc9Q6MQuXFAUNqAdAwMwoK0XKcVBSkEhTMqARryU11eBn9IVFlYeiOp8oaedEcC0860NO+usaVZhqaSoc2o4ncDSKVRTRj8OUgoKKcXhV5IyzkfAtAr5vCCpjgWbzmNEpsKlxjMMTH4rrrjDbz4AZuIJl6oXKcVBSkEhpTjsi37dJxj9xjb0XDpAP9WhUoA9L/0sgBGFN70GZiB+7FcvUoqDlIJCSnHYO+93AwzAvN/Q1kBXkemaLX6GFnwuHeJCtnc9s0CxXfFXPepFSnGQUlBIKQ57l5v6sIvIIO71cAQ/smEbFaHCOh5R909BryKDuH9qIfbhBhwgVpH5S7mKrFqkFAcpBYUoqQi274VZwu3awPkUFt/50sxX6KOFdp81BJD5LnQLdg23RcTfZq44l8AAPBCgXqQUBykFhZTisG8yc2DCLuF2QVaRqaAglYjvfMcz4BXc2BZ/dV7pTIGZyyXcUuo4kFIcfiUpY9IC5lz8KrIl9CoyZAEs4bZ/XI3/Oyl6+PVhuYNYRfZgqerZ+DgZ/ThIKSikFId9Ukvgm0cnAKnH8Cne59sBfxwKQDrv9QNgRhCryKCfRVb8bBn9OEgpKKQUh31Sqw4wQ/FSqxnw0iRiF/66jLBVZLDXsU0VYBVZFMxgnwM6Q4U/SSYDBQcpBYWU4vC0pZ7knxQ8LinzCR5+WJ5TO+SHX9g9GkaoIin65qMhrX4FUkeIlPoFpMxaK/4QB0otwG/oLQP+cJCU56Ijbir0/tVaSiklBb4Irgz4xf1hUsqU9gsZhS1CX57fQkWYOl1QqV4ihUtItT8+e5Hy15vXMfTLXy/q5vv7e9ZQZ70DWspoNM9OTi8uLu7vL/79W8qf9xf18+rVaRYnykkpjV7z5OT09BWlIPX1Vf2cniYNVV7KoFZnJ8zr5OvblL8/n9YNrdLJWZM6xUdfSSlq1Wg2z6jX2eff3yT8/eXsCGg2G8zpECnFaDcatLmavY+Z1L8+9eqnwZQSp9JS7OnozKt9iV8nBD32Qr2027FSUv/yUmsxxdcyKaddPxtPh29h8wApio+TG9xQwPnL6fXy8qCWUpjUem+YqjupO6ffJlQPlopbio1wcd05/TbqwVJ50eNFSkmpGikrpeAfb7N2tD9KSvXx0ab2GehzSSkffElcafQPLB0pIdVWlq4Gfe9AKTB+znKsdomGavd6X559rzuPf4jv79fJcAkpJc4XT0/rzuP3kyTDpW4FMBKr44Vlw+Uaam0VZ8FHCk2Ge2Wd4ty+R72OFZYOl3ZSkuT+aGkforT2OloONZJIJJInyP8A8KRi1gq4sFsAAAAASUVORK5CYII=";
+        
+        Param paramImage = new StringParamValue( ParamType.BASE64 , "param_image" , "Image: " , true , base64image );
         Param paramFoo = new StringParamValue( ParamType.STRING , "param_foo" , "Foo: " , true , "Bar" );
-
         Param paramInteger = new IntegerParamValue( ParamType.INTEGER , "param_integer" , "Number: " , true , 1 );
         Param paramLong = new LongParamValue( ParamType.LONG , "param_long" , "Long Number: " , true , 1L );
         Param paramDouble = new DoubleParamValue( ParamType.DOUBLE , "param_double" , "Double Number: " , true , 1D );
@@ -202,7 +204,7 @@ public class ReportEngineApplication implements CommandLineRunner {
         christmas.set( Calendar.YEAR , 2018 );
         Param paramCalendar = new CalendarParamValue( ParamType.DATE , "param_calendar" , "Now: " , true , christmas );
 
-        example.setParams( Arrays.asList(paramFoo , paramInteger , paramLong , paramDouble , paramCalendar ) );
+        example.setParams( Arrays.asList(paramImage, paramFoo , paramInteger , paramLong , paramDouble , paramCalendar ) );
 
         new ObjectMapper().writerWithDefaultPrettyPrinter().writeValue( new File( config.concat( configReports ) ) , Arrays.asList( example ) );
     }

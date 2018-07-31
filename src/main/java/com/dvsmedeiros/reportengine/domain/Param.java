@@ -9,7 +9,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo ( use = JsonTypeInfo.Id.NAME , include = JsonTypeInfo.As.EXISTING_PROPERTY , property = "type" , visible = true )
 @JsonSubTypes ( { @JsonSubTypes.Type ( value = StringParamValue.class , name = Param.STRING ) , @JsonSubTypes.Type ( value = IntegerParamValue.class , name = Param.INTEGER ) ,
         @JsonSubTypes.Type ( value = LongParamValue.class , name = Param.LONG ) , @JsonSubTypes.Type ( value = DoubleParamValue.class , name = Param.DOUBLE ) ,
-        @JsonSubTypes.Type ( value = CalendarParamValue.class , name = Param.DATE ) } )
+        @JsonSubTypes.Type ( value = CalendarParamValue.class , name = Param.DATE ),
+        @JsonSubTypes.Type ( value = StringParamValue.class , name = Param.BASE64 )
+} )
 public class Param extends DomainEntity {
 
     public static final String STRING = "STRING";
@@ -17,6 +19,7 @@ public class Param extends DomainEntity {
     public static final String LONG = "LONG";
     public static final String DOUBLE = "DOUBLE";
     public static final String DATE = "DATE";
+    public static final String BASE64 = "BASE64";
 
     private ParamType type;
     private String name;

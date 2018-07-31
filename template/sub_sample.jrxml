@@ -16,7 +16,7 @@
 	<title>
 		<band height="21">
 			<staticText>
-				<reportElement x="0" y="0" width="595" height="20" uuid="5674fc29-dd40-4172-a834-b04debd81c1e">
+				<reportElement x="0" y="0" width="307" height="20" uuid="5674fc29-dd40-4172-a834-b04debd81c1e">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0172282a-37e8-492f-b927-15fb9e967d78"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
