@@ -78,8 +78,10 @@ public class ReportEngineApplication implements CommandLineRunner {
         boolean hasArgs = args != null;
         boolean hasReporIdArg = hasArgs && args.length > 0;
         boolean hasInputDataSourceArg = hasArgs && args.length > 1;
+        boolean hasOutputFileNameArg = hasArgs && args.length > 2;
         boolean hasReportId = hasReporIdArg && args[0].chars().allMatch( Character::isDigit );
-        boolean hasDataSourceName = hasInputDataSourceArg && !args[ 1 ].isEmpty();
+        boolean hasDataSourceName = hasInputDataSourceArg && !args[ 1 ].isEmpty();  
+        boolean hasOutputFileName = hasOutputFileNameArg && !args[ 2 ].isEmpty();
         
         if ( !hasReporIdArg || !hasReportId ) {
             logger.error( "report id arg is required: ");
@@ -115,9 +117,12 @@ public class ReportEngineApplication implements CommandLineRunner {
         request.setReport( report );
         
         readInputDataSource( dataSourceName ).ifPresent( ds -> request.setDataSource( ds ) );        
-        
+                
         request.setFormat( Format.PDF );
         request.setOwner( "Administrador" );
+		if (hasOutputFileName) {
+			request.setOutputFileName(args[2]);
+		}
         
         Map<String, Object> params = new HashMap<>();
         request.getReport().getParams().forEach( param -> {

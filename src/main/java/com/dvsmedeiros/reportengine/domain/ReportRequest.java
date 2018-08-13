@@ -15,7 +15,8 @@ public class ReportRequest {
     private JsonNode dataSource;
     private Format format;
     private String owner;
-
+    private String outputFileName;
+    
     public Report getReport () {
         return report;
     }
@@ -47,8 +48,16 @@ public class ReportRequest {
     public void setOwner ( String owner ) {
         this.owner = owner;
     }
+    
+    public String getOutputFileName() {
+		return outputFileName;
+	}
 
-    public JsonDataSource getJsonDataSource () {
+	public void setOutputFileName(String outputFileName) {
+		this.outputFileName = outputFileName;
+	}
+
+	public JsonDataSource getJsonDataSource () {
         try {
             String jsonString = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString( this.dataSource );
             ByteArrayInputStream jsonDataStream = new ByteArrayInputStream( jsonString.getBytes() );

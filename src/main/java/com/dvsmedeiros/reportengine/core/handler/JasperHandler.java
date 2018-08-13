@@ -60,7 +60,14 @@ public class JasperHandler implements IReportHandler {
             String jasperFileName = templatePath.concat( request.getReport().getName() ).concat( FileExtention.JASPER.getExtention() );
             JasperReport report = ( JasperReport ) JRLoader.loadObject( new File( jasperFileName ) );
             JasperPrint jasperPrint = JasperFillManager.fillReport( report , params , request.getJsonDataSource() );
-            String responseFileName = resultPath.concat( request.getReport().getName() ).concat( "_" ).concat( UUID.randomUUID().toString() ).concat( request.getFormat().getExtension() );
+            String responseFileName;
+			if (request.getOutputFileName() != null && !request.getOutputFileName().isEmpty()) {
+				responseFileName = request.getOutputFileName().indexOf(Format.PDF.getExtension()) < 0
+						? resultPath.concat(request.getOutputFileName().concat(Format.PDF.getExtension()))
+						: resultPath.concat(request.getOutputFileName());
+			} else {
+				responseFileName = resultPath.concat( request.getReport().getName() ).concat( "_" ).concat( UUID.randomUUID().toString() ).concat( request.getFormat().getExtension() );
+			}
             //Save to ${report.path.result} folder
             JasperExportManager.exportReportToPdfFile(jasperPrint , responseFileName );
             
