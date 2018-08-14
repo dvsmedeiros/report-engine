@@ -188,7 +188,13 @@ public class ReportEngineApplication implements CommandLineRunner {
     }
     
     private void createReportsJsonWithExample () throws JsonGenerationException , JsonMappingException , IOException {
-
+    	
+    	File reports = new File(config.concat(configReports));
+    	if(reports.exists()) {
+    		logger.info("reports.json already exist. For create a new example file remove ".concat(config.concat(configReports)).concat(" and restart app."));
+    		return;
+    	}
+    	
         Report example = new Report();
         example.setName( "sample" );
         example.setId( 1L );
@@ -210,7 +216,6 @@ public class ReportEngineApplication implements CommandLineRunner {
         Param paramCalendar = new CalendarParamValue( ParamType.DATE , "param_calendar" , "Now: " , true , christmas );
 
         example.setParams( Arrays.asList(paramImage, paramFoo , paramInteger , paramLong , paramDouble , paramCalendar ) );
-
         new ObjectMapper().writerWithDefaultPrettyPrinter().writeValue( new File( config.concat( configReports ) ) , Arrays.asList( example ) );
     }
 }
