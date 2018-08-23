@@ -6,7 +6,7 @@
 
 `$ ./mvnw clean install`
 
-`$ java -jar target/report-engine-0.0.1-SNAPSHOT.jar <report_id> <input.json>`
+`$ java -Dreport.engine.home=<path_to_report-engine-0.0.1-SNAPSHOT.jar> -jar target/report-engine-0.0.1-SNAPSHOT.jar <report_id> <input.json>`
 
 #### Configure path directories in ./config.properties
 

@@ -39,7 +39,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
-@PropertySource ( "file:./config.properties" )
+@PropertySource ( "file:${report.engine.home}/config.properties" )
 public class ReportEngineApplication implements CommandLineRunner {
     
     private Logger logger = LoggerFactory.getLogger("REPORT-ENGINE");
