@@ -1,7 +1,10 @@
 package com.dvsmedeiros.reportengine;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -72,6 +75,11 @@ public class ReportEngineApplication implements CommandLineRunner {
     @Override
     public void run ( String... args ) throws Exception {
         
+		if (System.getProperty("file.encoding") == null || !System.getProperty("file.encoding").equalsIgnoreCase(StandardCharsets.UTF_8.name())) {
+			System.setProperty("file.encoding", StandardCharsets.UTF_8.name());
+		}
+		logger.info(String.format("file.encoding: %s", System.getProperty("file.encoding")));    	    	
+    	
         Long reportId = 0L;
         String dataSourceName = "input.json";
         
@@ -161,8 +169,9 @@ public class ReportEngineApplication implements CommandLineRunner {
     }
     
     private Optional < JsonNode > readInputDataSource(String fileName) throws JsonParseException, JsonMappingException, IOException {
-        logger.info( "searching input data source with name: " + fileName );
-        JsonNode readValue = new ObjectMapper().readValue(new File(input.concat( fileName )), JsonNode.class);
+        logger.info( "searching input data source with name: " + fileName );                       
+        InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(input.concat( fileName )), StandardCharsets.UTF_8);
+        JsonNode readValue = new ObjectMapper().readValue( inputStreamReader, JsonNode.class);        
         return Optional.of( readValue );
     }
     

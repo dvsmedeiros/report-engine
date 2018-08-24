@@ -1,6 +1,8 @@
 package com.dvsmedeiros.reportengine.domain;
 
 import java.io.ByteArrayInputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -59,9 +61,9 @@ public class ReportRequest {
 
 	public JsonDataSource getJsonDataSource () {
         try {
-            String jsonString = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString( this.dataSource );
-            ByteArrayInputStream jsonDataStream = new ByteArrayInputStream( jsonString.getBytes() );
-            return new JsonDataSource( jsonDataStream );
+            String encodedJsonString = new String(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString( this.dataSource ).getBytes(), StandardCharsets.UTF_8);            
+            ByteArrayInputStream jsonDataStream = new ByteArrayInputStream( encodedJsonString.getBytes() );
+            return new JsonDataSource( jsonDataStream);
         } catch ( JRException e ) {
             e.printStackTrace();
         } catch ( JsonProcessingException e ) {
