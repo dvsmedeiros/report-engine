@@ -79,10 +79,9 @@ public class ReportEngineApplication implements CommandLineRunner {
     	long start = System.currentTimeMillis();
     	logger.info("=================== encoding ====================");
 		if (System.getProperty("file.encoding") == null || !System.getProperty("file.encoding").equalsIgnoreCase(StandardCharsets.UTF_8.name())) {
-			System.setProperty("file.encoding", StandardCharsets.UTF_8.name());
-			System.setProperty("user.language", Locale.US.getLanguage());
-			System.setProperty("user.country", "BR");
+			System.setProperty("file.encoding", StandardCharsets.UTF_8.name());			
 		}
+		Locale.setDefault(Locale.US); //for correct parse of datasource
 		logger.info(String.format("file.encoding: %s", System.getProperty("file.encoding")));
 		logger.info("user.language: " + Locale.getDefault().getLanguage());
 		logger.info("user.country : " + Locale.getDefault().getCountry());
