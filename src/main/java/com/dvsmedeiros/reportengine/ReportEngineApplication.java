@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
@@ -80,7 +81,10 @@ public class ReportEngineApplication implements CommandLineRunner {
 		if (System.getProperty("file.encoding") == null || !System.getProperty("file.encoding").equalsIgnoreCase(StandardCharsets.UTF_8.name())) {
 			System.setProperty("file.encoding", StandardCharsets.UTF_8.name());
 		}
-		logger.info(String.format("file.encoding: %s", System.getProperty("file.encoding")));    	    	
+		logger.info(String.format("file.encoding: %s", System.getProperty("file.encoding")));
+		logger.info("user.language: " + Locale.getDefault().getLanguage());
+		logger.info("user.country : " + Locale.getDefault().getCountry());
+		logger.info("user.variant : " + Locale.getDefault().getVariant());
     	
         Long reportId = 0L;
         String dataSourceName = "input.json";
