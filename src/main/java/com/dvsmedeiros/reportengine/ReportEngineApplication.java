@@ -75,6 +75,8 @@ public class ReportEngineApplication implements CommandLineRunner {
     @Override
     public void run ( String... args ) throws Exception {
         
+    	long start = System.currentTimeMillis();
+    	logger.info("=================== encoding ====================");
 		if (System.getProperty("file.encoding") == null || !System.getProperty("file.encoding").equalsIgnoreCase(StandardCharsets.UTF_8.name())) {
 			System.setProperty("file.encoding", StandardCharsets.UTF_8.name());
 		}
@@ -91,24 +93,25 @@ public class ReportEngineApplication implements CommandLineRunner {
         boolean hasDataSourceName = hasInputDataSourceArg && !args[ 1 ].isEmpty();  
         boolean hasOutputFileName = hasOutputFileNameArg && !args[ 2 ].isEmpty();
         
+        logger.info("================ report request =================");
         if ( !hasReporIdArg || !hasReportId ) {
             logger.error( "report id arg is required: ");
             return;
         }
         reportId = Long.parseLong( args[ 0 ] );
-        logger.info( "report id: " + reportId );
+        logger.info( "ID         : " + reportId );
         
         if ( hasInputDataSourceArg && hasDataSourceName ) {
             dataSourceName = args[ 1 ];
         }
-        logger.info( "data source name: " + dataSourceName );
-        
+        logger.info( "DATA SOURCE: " + dataSourceName );        
         init();
         
         if(createExample != null && createExample.equals( Boolean.TRUE )) {
             createReportsJsonWithExample();
         }
         
+        logger.info("=============== start processing ================");
         Optional < Report > found = findReportById( reportId );
         if(!found.isPresent()) {
             //configuração do relatorio não foi encontrada.
@@ -156,15 +159,15 @@ public class ReportEngineApplication implements CommandLineRunner {
         });
         
         ReportResponse reponse = handler.execute( request , params );
+        long end = System.currentTimeMillis();
         
-        logger.info( "Report Name: ".concat( reponse.getName() ) );
-        logger.info( "Report Size: " + reponse.getSize() );
-
+        logger.info("============ Executed at: " +  (end - start) + "(ms) ==============");
     }
 
     private Optional < Report > findReportById(Long id) throws JsonParseException, JsonMappingException, IOException {
         logger.info( "searching report with id: " + id );
-        Report[] configured = new ObjectMapper().readValue(new File(config.concat( configReports )), Report[].class);
+		InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(config.concat(configReports)), StandardCharsets.UTF_8);
+        Report[] configured = new ObjectMapper().readValue(inputStreamReader, Report[].class);        
         return Arrays.asList( configured ).stream().filter( report -> report.getId().equals( id ) ).findFirst();
     }
     
@@ -181,16 +184,16 @@ public class ReportEngineApplication implements CommandLineRunner {
         result = result != null && !result.isEmpty() ? result : DefaultConfig.RESULT.getValue();
         config = config != null && !config.isEmpty() ? config : DefaultConfig.CONFIG.getValue();
         input = input != null && !input.isEmpty() ? input : DefaultConfig.INPUT.getValue();
-        
+                
         Arrays.asList( template , result , config, input ).stream()
             .filter( dir -> ! new File( dir ).exists() )
             .forEach( dir -> {
                 File file = new File( dir );
-                if ( ! file.exists() )
-                    logger.info( "create diretório: " + file.getAbsolutePath() );
+                if ( ! file.exists() ) {                	
+                	logger.info( "create directory: " + file.getAbsolutePath() );
                     file.mkdirs();
+                }                    
             } );
-        
         if(compile != null && compile.equals( Boolean.TRUE )) {
             handler.compile();
         }
@@ -199,6 +202,7 @@ public class ReportEngineApplication implements CommandLineRunner {
     private void createReportsJsonWithExample () throws JsonGenerationException , JsonMappingException , IOException {
     	
     	File reports = new File(config.concat(configReports));
+    	logger.info("=========== create config example file ==========");
     	if(reports.exists()) {
     		logger.info("reports.json already exist. For create a new example file remove ".concat(config.concat(configReports)).concat(" and restart app."));
     		return;

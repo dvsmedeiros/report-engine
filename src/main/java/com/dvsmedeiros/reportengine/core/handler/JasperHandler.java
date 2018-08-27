@@ -68,18 +68,14 @@ public class JasperHandler implements IReportHandler {
 			} else {
 				responseFileName = resultPath.concat( request.getReport().getName() ).concat( "_" ).concat( UUID.randomUUID().toString() ).concat( request.getFormat().getExtension() );
 			}
-            //Save to ${report.path.result} folder
-            JasperExportManager.exportReportToPdfFile(jasperPrint , responseFileName );
-            
+            //Save to ${report.path.result} folder            
             if(request.getFormat().equals( Format.HTML )) {
                 JasperExportManager.exportReportToHtmlFile(jasperPrint , responseFileName );
             } else {
-                JasperExportManager.exportReportToPdfFile(jasperPrint , responseFileName ); 
+                JasperExportManager.exportReportToPdfFile(jasperPrint , responseFileName );                
             }
-            
-            response.setFile(JasperExportManager.exportReportToPdf( jasperPrint ));
             response.setName( responseFileName );
-            
+			logger.info("Report generated in: ".concat(response.getName()));           
         } catch ( JRException e ) {
             e.printStackTrace();
         }
@@ -90,23 +86,18 @@ public class JasperHandler implements IReportHandler {
     public void compile () {
         
         try {
+        	logger.info("=============== compiling *.jrxml ===============");
             Files.list( Paths.get( templatePath ) )
                 .filter( file -> FileExtention.JRXML.getExtention().endsWith( getFileExtension( file ) ) )
-                .forEach( file -> {
-                    logger.info( "compiling report design: " + file.getFileName() );
-                    try {
-                        /**
-                         * Compile the report to a file name same as the JRXML file name
-                         */
-                        logger.info( "compiling report from: " + file.toAbsolutePath() );
+                .forEach( file -> {                    
+                    try {                        
                         String source = file.toAbsolutePath().toString();                    
                         String compileReportToFile = JasperCompileManager.compileReportToFile(source);
-                        logger.info( compileReportToFile );
+                        logger.info("compiled: " + compileReportToFile + " from: " + file.toAbsolutePath());
                     } catch ( JRException e ) {
                         e.printStackTrace();
-                    }
-                    logger.info( "done compiling." );
-                } );
+                    }                    
+                } );            
         } catch ( IOException e ) {
             e.printStackTrace();
         }
